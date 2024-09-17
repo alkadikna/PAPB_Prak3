@@ -1,6 +1,7 @@
 package com.example.praktikum_3
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -24,7 +25,9 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -39,6 +42,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -60,11 +64,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Praktikum_3Theme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
+//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+//                    Greeting(
+//                        name = "Android",
+//                        modifier = Modifier.padding(innerPadding)
+//                    )
+//                }
+                Surface(color = MaterialTheme.colorScheme.background) {
+                    LoginPage(modifier = Modifier)
                 }
             }
         }
@@ -89,6 +96,8 @@ fun LoginPage(modifier: Modifier){
         horizontalAlignment = Alignment.CenterHorizontally,
 
     ){
+        val context = LocalContext.current
+
         Image(
             painter = painterResource(id = R.drawable.guruji),
             contentDescription = null,
@@ -159,7 +168,7 @@ fun LoginPage(modifier: Modifier){
 
         Spacer(modifier = modifier.size(30.dp))
 
-        Button(onClick = { /*TODO*/ },
+        Button(onClick = { Toast.makeText(context, "Login button clicked!", Toast.LENGTH_SHORT).show() },
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color(0xFFFD8C00),
             ),
@@ -177,7 +186,7 @@ fun LoginPage(modifier: Modifier){
 
         Spacer(modifier = modifier.size(15.dp))
 
-        TextButton(onClick = { /*TODO*/ }, modifier = modifier
+        TextButton(onClick = { Toast.makeText(context, "Forgot Password Button Clicked !", Toast.LENGTH_SHORT).show() }, modifier = modifier
             .align(Alignment.End)
             .padding(end = 35.dp)) {
             Text(text = "Forgot Password?", color = Color(0xFFFD8C00))
@@ -252,21 +261,33 @@ fun LoginPage(modifier: Modifier){
                 pop()
             }
 
+
+
             ClickableText(
                 text = annotatedText,
-                onClick = { /*TODO*/ }
+                onClick = { offset ->
+
+                    annotatedText.getStringAnnotations(
+                        tag = "REGISTER",
+                        start = offset,
+                        end = offset
+                    )
+                        .firstOrNull()?.let {
+                            Toast.makeText(context, "Register button clicked!", Toast.LENGTH_SHORT).show()
+                        }
+                }
             )
         }
 
         Spacer(modifier = modifier.size(60.dp))
 
         val annotatedText = buildAnnotatedString {
-            withStyle(style = SpanStyle(color = Color.White)){
+            withStyle(style = SpanStyle(color = Color.White, fontSize = 12.sp)){
                 append("By signing up, you are agree with our ")
             }
 
             pushStringAnnotation(tag = "TC", annotation = "tc")
-            withStyle(style = SpanStyle(color = Color(0xFFFD8C00), textDecoration = TextDecoration.Underline, fontSize = 16.sp)) {
+            withStyle(style = SpanStyle(color = Color(0xFFFD8C00), textDecoration = TextDecoration.Underline, fontSize = 12.sp)) {
                 append("Terms & Conditions")
             }
             pop()
@@ -274,7 +295,17 @@ fun LoginPage(modifier: Modifier){
 
         ClickableText(
             text = annotatedText,
-            onClick = { /*TODO*/ }
+            onClick = { offset ->
+
+                annotatedText.getStringAnnotations(
+                    tag = "TC",
+                    start = offset,
+                    end = offset
+                )
+                    .firstOrNull()?.let {
+                        Toast.makeText(context, "T&C button clicked!", Toast.LENGTH_SHORT).show()
+                    }
+            }
         )
 
 
